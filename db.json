@@ -1,0 +1,21 @@
+{
+  "doctors": [
+    {
+      "id": 1,
+      "name": "Dr. James",
+      "specialization": "Cardiologist"
+    },
+    {
+      "id": 2,
+      "name": "Dr. Sarah",
+      "specialization": "Dermatologist"
+    },
+    {
+      "id": 3,
+      "name": "Dr. Michael",
+      "specialization": "Neurologist"
+    }
+  ],
+
+  "bookings": []
+}
