@@ -1,21 +1,31 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import HomePage from "./pages/HomePage";
-import DoctorsList from "./pages/DoctorsList";
-import BookingPage from "./pages/BookingPage";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
+
+import Home from "./pages/Home";
+import Doctors from "./pages/Doctors";
+import Booking from "./pages/Booking";
 
 function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-gray-100">
-        <Navbar />
+      <Routes>
 
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/doctors" element={<DoctorsList />} />
-          <Route path="/booking/:id" element={<BookingPage />} />
-        </Routes>
-      </div>
+        <Route path="/" element={<Home />} />
+
+        <Route
+          path="/doctors"
+          element={<Doctors />}
+        />
+
+        <Route
+          path="/booking/:id"
+          element={<Booking />}
+        />
+
+      </Routes>
     </BrowserRouter>
   );
 }
