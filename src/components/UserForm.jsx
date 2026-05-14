@@ -1,25 +1,28 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useUser } from '../context/UserContext';
+import { useState } from 'react'; // useState hook for managing form data state
+import { useNavigate } from 'react-router-dom'; // useNavigate for programmatic navigation
+import { useUser } from '../context/UserContext'; // Custom hook to access user context
 
 const UserForm = () => {
+  // State for form inputs
   const [formData, setFormData] = useState({
     name: '',
     age: '',
     gender: '',
     email: ''
   });
-  const { setUser } = useUser();
-  const navigate = useNavigate();
+  const { setUser } = useUser(); // Get setUser function from context
+  const navigate = useNavigate(); // Hook for navigation
 
+  // Handle input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Handle form submission
   const handleSubmit = (e) => {
-    e.preventDefault();
-    setUser(formData);
-    navigate('/doctors');
+    e.preventDefault(); // Prevent default form submission
+    setUser(formData); // Update global user state
+    navigate('/doctors'); // Navigate to doctors list
   };
 
   return (

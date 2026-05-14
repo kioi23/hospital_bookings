@@ -1,21 +1,22 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react'; // useEffect for side effects, useState for state
+import { Link } from 'react-router-dom'; // Link for routing to booking page
 
 const DoctorsList = () => {
-  const [doctors, setDoctors] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [doctors, setDoctors] = useState([]); // State for doctors data
+  const [loading, setLoading] = useState(true); // State for loading indicator
 
+  // Fetch doctors on component mount (GET request)
   useEffect(() => {
     fetch('http://localhost:3001/doctors')
       .then(res => res.json())
       .then(data => {
-        setDoctors(data);
-        setLoading(false);
+        setDoctors(data); // Update doctors state
+        setLoading(false); // Stop loading
       })
-      .catch(err => console.error(err));
-  }, []);
+      .catch(err => console.error(err)); // Handle errors
+  }, []); // Empty dependency array means run once
 
-  if (loading) return <div className="text-center mt-10">Loading...</div>;
+  if (loading) return <div className="text-center mt-10">Loading...</div>; // Loading state
 
   return (
     <div className="container mx-auto p-4">

@@ -1,27 +1,29 @@
-import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useUser } from '../context/UserContext';
+import { useEffect, useState } from 'react'; // useEffect for fetching data, useState for local state
+import { useParams, useNavigate } from 'react-router-dom'; // useParams for URL params, useNavigate for navigation
+import { useUser } from '../context/UserContext'; // Access user context
 
 const BookingPage = () => {
-  const { id } = useParams();
-  const { user } = useUser();
-  const navigate = useNavigate();
-  const [doctor, setDoctor] = useState(null);
-  const [type, setType] = useState('');
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
-  const [availableSlots, setAvailableSlots] = useState([]);
-  const [message, setMessage] = useState('');
+  const { id } = useParams(); // Get doctor ID from URL
+  const { user } = useUser(); // Get user data from context
+  const navigate = useNavigate(); // For potential navigation
+  const [doctor, setDoctor] = useState(null); // State for doctor details
+  const [type, setType] = useState(''); // Booking type: appointment or consultation
+  const [date, setDate] = useState(''); // Selected date
+  const [time, setTime] = useState(''); // Selected time
+  const [availableSlots, setAvailableSlots] = useState([]); // Available slots
+  const [message, setMessage] = useState(''); // Feedback message
 
+  // Fetch doctor data on mount or ID change
   useEffect(() => {
     fetch(`http://localhost:3001/doctors/${id}`)
       .then(res => res.json())
       .then(data => {
         setDoctor(data);
-        setAvailableSlots(data.availableSlots.filter(slot => slot.available));
+        setAvailableSlots(data.availableSlots.filter(slot => slot.available)); // Filter available slots
       });
   }, [id]);
 
+  // Handle booking submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!user) {
@@ -29,7 +31,7 @@ const BookingPage = () => {
       return;
     }
 
-    // Check if slot is available
+    // Find the selected slot
     const slot = availableSlots.find(s => s.date === date && s.time === time);
     if (!slot) {
       setMessage('Selected slot is not available.');
@@ -37,6 +39,7 @@ const BookingPage = () => {
     }
 
     try {
+      // POST new booking (CREATE)
       const response = await fetch('http://localhost:3001/bookings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -50,7 +53,7 @@ const BookingPage = () => {
       });
 
       if (response.ok) {
-        // Update slot availability
+        // PATCH doctor to update availability (UPDATE)
         await fetch(`http://localhost:3001/doctors/${id}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
@@ -69,7 +72,9 @@ const BookingPage = () => {
     }
   };
 
+  // Get unique dates from available slots
   const uniqueDates = [...new Set(availableSlots.map(s => s.date))];
+  // Get times for selected date
   const timesForDate = availableSlots.filter(s => s.date === date).map(s => s.time);
 
   if (!doctor) return <div>Loading...</div>;
